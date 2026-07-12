@@ -1,0 +1,117 @@
+#include <iostream>
+using namespace std;
+
+// Structure of Tree Node
+struct Node
+{
+    int data;
+    Node *left;
+    Node *right;
+};
+
+// Create a new node
+Node* createNode(int value)
+{
+    Node* newNode = new Node();
+    newNode->data = value;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+// Insert node into BST
+Node* insert(Node* root, int value)
+{
+    if (root == NULL)
+        return createNode(value);
+
+    if (value < root->data)
+        root->left = insert(root->left, value);
+    else if (value > root->data)
+        root->right = insert(root->right, value);
+
+    return root;
+}
+
+// Inorder Traversal (Infix)
+void inorder(Node* root)
+{
+    if (root != NULL)
+    {
+        inorder(root->left);
+        cout << root->data << " ";
+        inorder(root->right);
+    }
+}
+
+// Preorder Traversal (Prefix)
+void preorder(Node* root)
+{
+    if (root != NULL)
+    {
+        cout << root->data << " ";
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+// Postorder Traversal (Postfix)
+void postorder(Node* root)
+{
+    if (root != NULL)
+    {
+        postorder(root->left);
+        postorder(root->right);
+        cout << root->data << " ";
+    }
+}
+
+// Search an element
+bool search(Node* root, int key)
+{
+    if (root == NULL)
+        return false;
+
+    if (root->data == key)
+        return true;
+
+    if (key < root->data)
+        return search(root->left, key);
+
+    return search(root->right, key);
+}
+
+int main()
+{
+    Node* root = NULL;
+    int n, value, key;
+
+    cout << "Enter number of nodes: ";
+    cin >> n;
+
+    cout << "Enter node values:\n";
+    for (int i = 0; i < n; i++)
+    {
+        cin >> value;
+        root = insert(root, value);
+    }
+
+    cout << "\nInorder (Infix): ";
+    inorder(root);
+
+    cout << "\nPreorder (Prefix): ";
+    preorder(root);
+
+    cout << "\nPostorder (Postfix): ";
+    postorder(root);
+
+    cout << "\n\nEnter value to search: ";
+    cin >> key;
+
+    if (search(root, key))
+        cout << "Element Found";
+    else
+        cout << "Element Not Found";
+
+    return 0;
+}

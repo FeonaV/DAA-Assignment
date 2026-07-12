@@ -1,0 +1,180 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+class Graph
+{
+    int V;
+    vector<vector<int>> adj;
+
+    void DFSUtil(int v, vector<bool> &visited)
+    {
+        visited[v] = true;
+        cout << v << " ";
+
+        for (int x : adj[v])
+        {
+            if (!visited[x])
+                DFSUtil(x, visited);
+        }
+    }
+
+public:
+    Graph(int vertices)
+    {
+        V = vertices;
+        adj.resize(V);
+    }
+
+    // Insert Edge
+    void insertEdge(int u, int v)
+    {
+        if (u >= V || v >= V || u < 0 || v < 0)
+        {
+            cout << "Invalid Vertex!\n";
+            return;
+        }
+
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    // Display Graph
+    void display()
+    {
+        cout << "\nGraph:\n";
+
+        for (int i = 0; i < V; i++)
+        {
+            cout << i << " : ";
+            for (int x : adj[i])
+                cout << x << " ";
+            cout << endl;
+        }
+    }
+
+    // Search Vertex
+    void searchVertex(int v)
+    {
+        if (v >= 0 && v < V)
+            cout << "Vertex Found\n";
+        else
+            cout << "Vertex Not Found\n";
+    }
+
+    // DFS
+    void DFS(int start)
+    {
+        vector<bool> visited(V, false);
+
+        cout << "DFS: ";
+        DFSUtil(start, visited);
+        cout << endl;
+    }
+
+    // BFS
+    void BFS(int start)
+    {
+        vector<bool> visited(V, false);
+        queue<int> q;
+
+        visited[start] = true;
+        q.push(start);
+
+        cout << "BFS: ";
+
+        while (!q.empty())
+        {
+            int node = q.front();
+            q.pop();
+
+            cout << node << " ";
+
+            for (int x : adj[node])
+            {
+                if (!visited[x])
+                {
+                    visited[x] = true;
+                    q.push(x);
+                }
+            }
+        }
+
+        cout << endl;
+    }
+
+    // Delete Edge
+    void deleteEdge(int u, int v)
+    {
+        if (u >= V || v >= V || u < 0 || v < 0)
+        {
+            cout << "Invalid Vertex!\n";
+            return;
+        }
+
+        auto it = find(adj[u].begin(), adj[u].end(), v);
+
+        if (it == adj[u].end())
+        {
+            cout << "Edge Not Found\n";
+            return;
+        }
+
+        adj[u].erase(it);
+
+        it = find(adj[v].begin(), adj[v].end(), u);
+        if (it != adj[v].end())
+            adj[v].erase(it);
+
+        cout << "Edge Deleted Successfully\n";
+    }
+};
+
+int main()
+{
+    int V, E;
+
+    cout << "Enter number of vertices: ";
+    cin >> V;
+
+    Graph g(V);
+
+    cout << "Enter number of edges: ";
+    cin >> E;
+
+    cout << "Enter edges (u v):\n";
+
+    for (int i = 0; i < E; i++)
+    {
+        int u, v;
+        cin >> u >> v;
+        g.insertEdge(u, v);
+    }
+
+    g.display();
+
+    int vertex;
+
+    cout << "\nEnter vertex to search: ";
+    cin >> vertex;
+
+    g.searchVertex(vertex);
+
+    cout << endl;
+
+    g.DFS(0);
+    g.BFS(0);
+
+    int u, v;
+
+    cout << "\nEnter edge to delete (u v): ";
+    cin >> u >> v;
+
+    g.deleteEdge(u, v);
+
+    g.display();
+
+    return 0;
+}
