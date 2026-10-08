@@ -1,0 +1,78 @@
+#include <iostream>
+using namespace std;
+
+#define MAX 3
+
+int stack[MAX];
+int top = -1;
+
+void push(int value)
+{
+    if (top == MAX - 1)
+        cout << "Stack Overflow\n";
+    else
+    {
+        stack[++top] = value;
+        cout << value << " pushed into stack\n";
+    }
+}
+
+void pop()
+{
+    if (top == -1)
+        cout << "Stack Underflow\n";
+    else
+        cout << stack[top--] << " popped from stack\n";
+}
+
+void display()
+{
+    if (top == -1)
+        cout << "Stack is Empty\n";
+    else
+    {
+        cout << "Stack elements: ";
+        for (int i = top; i >= 0; i--)
+            cout << stack[i] << " ";
+        cout << endl;
+    }
+}
+
+int main()
+{
+    int choice, value;
+    cout << "\n1. Push\n2. Pop\n3. Display\n4. Exit\n";
+
+    do
+    {
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            cout << "Enter value: ";
+            cin >> value;
+            push(value);
+            break;
+
+        case 2:
+            pop();
+            break;
+
+        case 3:
+            display();
+            break;
+
+        case 4:
+            cout << "Exiting...\n";
+            break;
+
+        default:
+            cout << "Invalid Choice\n";
+        }
+
+    } while (choice != 4);
+
+    return 0;
+}
